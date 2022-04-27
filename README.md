@@ -77,10 +77,12 @@ bin/kafka-console-consumer.sh --bootstrap-server 127.0.0.1:9092 --topic petstore
 
 - kubectl 설치
 https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/
+
 - awscli 설치
-TODO
+https://docs.aws.amazon.com/ko_kr/cli/latest/userguide/getting-started-install.html
+
 - eksctl 설치
-TODO
+https://docs.aws.amazon.com/ko_kr/eks/latest/userguide/eksctl.html
 
 ## 쿠버네티스 
 
@@ -100,12 +102,31 @@ helm install my-kafka bitnami/kafka
 ```
 
 #### Nginx ingress 설치
-(TODO)
+https://www.ibm.com/docs/ko/control-desk/7.6.1.x?topic=kubernetes-installing-nginx-ingress-controller-in-cluster
 ```bash
-
+git clone https://github.com/kubernetes/ingress-nginx.git
+cd ./ingress-nginx/deploy/static/provider/baremetal
+kubectl apply -f .
+kubectl get deploy -n ingress-nginx
 ```
 
-## 자주 쓰는 명령 (TODO)
+## 자주 쓰는 명령
 - 포트 확인 및 점유 프로세스 삭제
+```bash
+cmd(포트확인) : netstat -lntp | grep :808 
+tcp        0      0 0.0.0.0:8080            0.0.0.0:*               LISTEN      3752/java           
+tcp        0      0 0.0.0.0:8081            0.0.0.0:*               LISTEN      3109/java           
+cmd : kill -9 3109  <-- 해당 pid
+모든 점유 프로세스 삭제 : kill -9 `netstat -lntp|grep 808|awk '{ print $7 }'|grep -o '[0-9]*'`
+```
+
 - httpie pod 생성
+apt-get update
+apt-get install httpie
+
 - siege pod 생성
+- 부하테스트 툴(Siege) 설치 및 Load Testing
+    - kubectl run siege --image=apexacme/siege-nginx -n istio-cb-ns
+    - kubectl exec -it siege -c siege -n istio-cb-ns --/bin/bash
+    - siege -c1 -t10S -v http://httpbin:8000/get # 100% availability
+    - siege -c2 -t10S -v http://httpbin:8000/get # 87% availability
