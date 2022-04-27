@@ -104,10 +104,9 @@ helm install my-kafka bitnami/kafka
 #### Nginx ingress 설치
 https://www.ibm.com/docs/ko/control-desk/7.6.1.x?topic=kubernetes-installing-nginx-ingress-controller-in-cluster
 ```bash
-git clone https://github.com/kubernetes/ingress-nginx.git
-cd ./ingress-nginx/deploy/static/provider/baremetal
-kubectl apply -f .
-kubectl get deploy -n ingress-nginx
+helm upgrade --install ingress-nginx ingress-nginx \
+  --repo https://kubernetes.github.io/ingress-nginx \
+  --namespace ingress-nginx --create-namespace
 ```
 
 ## 자주 쓰는 명령
@@ -121,12 +120,8 @@ cmd : kill -9 3109  <-- 해당 pid
 ```
 
 - httpie pod 생성
-apt-get update
-apt-get install httpie
+https://github.com/TheOpenCloudEngine/uEngine-cloud/wiki/Httpie-%EC%84%A4%EC%B9%98
+
 
 - siege pod 생성
-- 부하테스트 툴(Siege) 설치 및 Load Testing
-    - kubectl run siege --image=apexacme/siege-nginx -n istio-cb-ns
-    - kubectl exec -it siege -c siege -n istio-cb-ns --/bin/bash
-    - siege -c1 -t10S -v http://httpbin:8000/get # 100% availability
-    - siege -c2 -t10S -v http://httpbin:8000/get # 87% availability
+https://github.com/JoeDog/siege.git
